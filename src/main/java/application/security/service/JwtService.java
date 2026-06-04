@@ -19,19 +19,19 @@ import java.util.function.Function;
 public class JwtService {
 
     private final String SECRETE_KEY;
-    private final long ACCESS_TOKEN_EXPIRE_MINUTES;
+    private final String ACCESS_TOKEN_EXPIRE_MINUTES;
 
     public JwtService(
             @Value("${jwt.secret}") String secreteKey,
-            @Value("${jwt.access_token_minutes}") long accessTokenExpireMinutes) {
+            @Value("${jwt.access_token_minutes}") String accessTokenExpireMinutes) {
         SECRETE_KEY = secreteKey;
-        ACCESS_TOKEN_EXPIRE_MINUTES = accessTokenExpireMinutes;
+        ACCESS_TOKEN_EXPIRE_MINUTES =  accessTokenExpireMinutes;
     }
 
     public String generateToken(Map<String, Object> claims, String username, String user_id){
 
         Instant now = Instant.now();
-        Instant expiration = now.plusSeconds(ACCESS_TOKEN_EXPIRE_MINUTES);
+        Instant expiration = now.plusSeconds(Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES));
         String jti = UUID.randomUUID().toString();
 
         claims.put(
@@ -44,7 +44,7 @@ public class JwtService {
                 .id(jti)
                 .subject(username)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(Instant.ofEpochSecond(ACCESS_TOKEN_EXPIRE_MINUTES)))
+                .expiration(Date.from(Instant.ofEpochSecond( Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES))))
                 .signWith(getSignKey())
                 .compact();
 
