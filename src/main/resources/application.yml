@@ -23,7 +23,8 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  accessTokenMinutes: ${JWT_ACCESS_TOKEN_MINUTES}
+  access_token_minutes: ${JWT_ACCESS_TOKEN_MINUTES}
+  token_name: ${JWT_TOKEN_NAME}
 server:
   port: 8888
 kind: Application

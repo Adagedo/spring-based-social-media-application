@@ -1,10 +1,8 @@
 package application.entity.user;
 
 import application.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import application.entity.code.VerificationCodeEntity;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.sql.Date;
@@ -39,8 +37,13 @@ public class UserEntity extends BaseEntity {
     @Column(name = "last_login_at")
     private Timestamp lastLoginAt;
 
-    @Column(name = "email_verification_expiry")
-    private Date verificationExpiry;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private VerificationCodeEntity verificationCode;
+
+    @Column(name = "is_verified")
+    @Builder.Default
+    private boolean is_verified = false;
 
     @Column(name = "status")
     @Builder.Default
