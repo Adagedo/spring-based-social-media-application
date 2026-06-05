@@ -5,9 +5,12 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
+
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
@@ -21,18 +24,22 @@ public class JwtService {
     private final String SECRETE_KEY;
     private final String ACCESS_TOKEN_EXPIRE_MINUTES;
 
+    private final  String TOKEN_NAME;
+
     public JwtService(
             @Value("${jwt.secret}") String secreteKey,
-            @Value("${jwt.access_token_minutes}") String accessTokenExpireMinutes) {
+            @Value("${jwt.access_token_minutes}") String accessTokenExpireMinutes,
+            @Value("${jwt.token_name}") String tokenName) {
         SECRETE_KEY = secreteKey;
         ACCESS_TOKEN_EXPIRE_MINUTES =  accessTokenExpireMinutes;
+        TOKEN_NAME = tokenName;
     }
 
-    public String generateToken(Map<String, Object> claims, String username, String user_id){
+    public String generateToken(String username, String user_id){
 
         Instant now = Instant.now();
-        Instant expiration = now.plusSeconds(Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES));
         String jti = UUID.randomUUID().toString();
+        Map<String, Object> claims = new java.util.HashMap<>(Map.of());
 
         claims.put(
                 "user", username
@@ -44,10 +51,16 @@ public class JwtService {
                 .id(jti)
                 .subject(username)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(Instant.ofEpochSecond( Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES))))
+                .expiration(Date.from(Instant.ofEpochSecond(Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES))))
                 .signWith(getSignKey())
                 .compact();
 
+    }
+
+    public String getTokenCookie(HttpServletRequest request){
+        jakarta.servlet.http.Cookie cookie = WebUtils.getCookie(request, TOKEN_NAME);
+        if (cookie != null) return cookie.getValue();
+        return null;
     }
 
     private SecretKey getSignKey(){
@@ -79,7 +92,7 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token){
-        return getExpirationDate(token).before(new java.util.Date());
+        return getExpirationDate(token).before(new Date());
     }
 
     private Date getExpirationDate(String token){

@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class VerifyCodeTransaction {
 
@@ -21,7 +23,7 @@ public class VerifyCodeTransaction {
     }
 
     @Transactional
-    public VerificationCodeEntity SaveVerifiedUserCode(SignUpRequest dto, UserEntity user, String code){
+    public void SaveVerifiedUserCode(SignUpRequest dto, UserEntity user, String code){
 
         VerificationCodeEntity code_data = VerificationCodeEntity.builder()
                 .user(user)
@@ -30,7 +32,15 @@ public class VerifyCodeTransaction {
                 .type("email_verification")
                 .build();
 
-        return this.verificationCodeRepository.save(code_data);
+        this.verificationCodeRepository.save(code_data);
     }
 
+    public VerificationCodeEntity findCodeByUserId(UUID user_id){
+        return this.verificationCodeRepository.findByUserId(user_id);
+    }
+
+    @Transactional
+    public void updateCode(VerificationCodeEntity verificationCodeEntity){
+        this.verificationCodeRepository.save(verificationCodeEntity);
+    }
 }

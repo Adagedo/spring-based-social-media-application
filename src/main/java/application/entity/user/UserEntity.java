@@ -5,8 +5,13 @@ import application.entity.code.VerificationCodeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -23,7 +28,7 @@ import java.sql.Timestamp;
                 @Index(name = "idx_user_id", columnList = "id", unique = true)
         }
 )
-public class UserEntity extends BaseEntity {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true, length = 64)
     private String username;
@@ -42,11 +47,19 @@ public class UserEntity extends BaseEntity {
     private VerificationCodeEntity verificationCode;
 
     @Column(name = "is_verified")
-    @Builder.Default
-    private boolean is_verified = false;
+    private boolean is_verified;
 
     @Column(name = "status")
     @Builder.Default
     private String status = "inactive";
 
+    /**
+     * Returns the authorities granted to the user. Cannot return <code>null</code>.
+     *
+     * @return the authorities, sorted by natural key (never <code>null</code>)
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }

@@ -32,9 +32,9 @@ public class VerificationCodeEntity extends BaseEntity {
     @Column(name = "user_email", nullable = false)
     private  String user_email;
 
-    @Column(name = "code", nullable = false)
+    @Column(name = "code")
     private  String code;
 
-    @Column(name = "code_type", nullable = false)
+    @Column(name = "code_type")
     private  String type;
 }

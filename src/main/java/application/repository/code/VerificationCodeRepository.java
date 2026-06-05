@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface VerificationCodeRepository extends JpaRepository<VerificationCodeEntity, UUID> {
     VerificationCodeEntity findByUserEmail(String email);
-    VerificationCodeEntity findByUserId(String user_id);
+    VerificationCodeEntity findByUserId(UUID user_id);
 }
