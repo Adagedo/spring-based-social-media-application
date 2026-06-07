@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
@@ -21,18 +22,18 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRETE_KEY;
-    private final String ACCESS_TOKEN_EXPIRE_MINUTES;
+    private  String SECRETE_KEY;
+    private  String ACCESS_TOKEN_EXPIRE_MINUTES;
 
-    private final  String TOKEN_NAME;
+    private   String TOKEN_NAME;
 
     public JwtService(
             @Value("${jwt.secret}") String secreteKey,
             @Value("${jwt.access_token_minutes}") String accessTokenExpireMinutes,
             @Value("${jwt.token_name}") String tokenName) {
-        SECRETE_KEY = secreteKey;
-        ACCESS_TOKEN_EXPIRE_MINUTES =  accessTokenExpireMinutes;
-        TOKEN_NAME = tokenName;
+        this.SECRETE_KEY = secreteKey;
+        this.ACCESS_TOKEN_EXPIRE_MINUTES =  accessTokenExpireMinutes;
+        this.TOKEN_NAME = tokenName;
     }
 
     public String generateToken(String username, String user_id){
@@ -45,13 +46,17 @@ public class JwtService {
                 "user", username
         );
         claims.put("user_id", user_id);
+        long expireMinutes = Long.parseLong(ACCESS_TOKEN_EXPIRE_MINUTES);
+        Date expiration = Date.from(
+                Instant.now().plus(Duration.ofMinutes(expireMinutes))
+        );
 
         return Jwts.builder()
                 .claims(claims)
                 .id(jti)
                 .subject(username)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(Instant.ofEpochSecond(Integer.parseInt(ACCESS_TOKEN_EXPIRE_MINUTES))))
+                .expiration(expiration)
                 .signWith(getSignKey())
                 .compact();
 
