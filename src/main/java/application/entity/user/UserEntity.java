@@ -2,6 +2,8 @@ package application.entity.user;
 
 import application.entity.BaseEntity;
 import application.entity.code.VerificationCodeEntity;
+import application.entity.post.PostEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +17,8 @@ import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -43,8 +46,15 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private Timestamp lastLoginAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private VerificationCodeEntity verificationCode;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true
+    )
+    @JsonManagedReference
+    private List<PostEntity> posts;
 
     @Column(name = "is_verified")
     private boolean is_verified;

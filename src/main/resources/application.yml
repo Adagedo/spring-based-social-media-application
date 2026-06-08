@@ -20,6 +20,10 @@ spring:
       hibernate:
         format_sql: true
     database: mysql
+  servlet:
+    multipart:
+          max-file-size: 20MB
+          max-request-size: 20MB
 
 jwt:
   secret: ${JWT_SECRET}
@@ -27,4 +31,8 @@ jwt:
   token_name: ${JWT_TOKEN_NAME}
 server:
   port: 8888
+
+storage:
+  upload_dir: uploads/images
+
 kind: Application
