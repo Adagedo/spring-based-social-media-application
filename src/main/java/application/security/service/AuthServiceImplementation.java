@@ -11,18 +11,15 @@ import application.transactions.auth.CreateUserTransaction;
 import application.transactions.auth.VerifyCodeTransaction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Slf4j
@@ -39,7 +36,7 @@ public class AuthServiceImplementation implements AuthService{
 
     private final PasswordEncoder passwordEncoder;
 
-    private final  String TOKEN_NAME;
+    private String TOKEN_NAME;
 
 
     public AuthServiceImplementation(JwtService jwtService, AuthenticationManager authenticationManager, VerifyCodeTransaction verifyCodeTransaction,
@@ -171,7 +168,6 @@ public class AuthServiceImplementation implements AuthService{
 //    public ResponseEntity<?> resetPassword(String resetCode) {
 //        return null;
 //    }
-
 
 
 }
