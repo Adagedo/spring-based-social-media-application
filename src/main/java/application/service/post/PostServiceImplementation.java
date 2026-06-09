@@ -5,6 +5,7 @@ import application.entity.post.PostEntity;
 import application.entity.user.UserEntity;
 import application.repository.post.PostRepository;
 import application.repository.user.UserRepository;
+import application.service.storage.ImageStorage;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

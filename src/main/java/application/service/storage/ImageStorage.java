@@ -1,4 +1,4 @@
-package application.service.post;
+package application.service.storage;
 
 
 import org.springframework.core.io.Resource;

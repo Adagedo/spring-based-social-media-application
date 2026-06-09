@@ -1,4 +1,4 @@
-package application.service.post;
+package application.service.storage;
 
 import application.exceptions.custom_exception.CustomImageStorageException;
 import application.exceptions.custom_exception.CustomImageStorageFileNotFoundException;

@@ -1,8 +1,7 @@
 package application;
 
-import application.service.post.ImageStorageProperties;
+import application.service.storage.ImageStorageProperties;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
