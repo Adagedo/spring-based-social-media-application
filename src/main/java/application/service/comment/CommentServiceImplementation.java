@@ -11,10 +11,12 @@ import application.service.storage.ImageStorage;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.stream.events.Comment;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -157,6 +159,27 @@ public class CommentServiceImplementation implements CommentService{
             }
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(comments);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteComment(String comment_id, UserDetails userDetails) {
+        if (userDetails.getUsername().isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("you dont have an account, please create an account to continue using this service");
+
+        String current_user = userDetails.getUsername();
+
+        Optional<CommentEntity> optionalComment = commentRepository.findById(UUID.fromString(comment_id));
+        UserEntity author = userRepository.findByUsername(current_user);
+
+        if(optionalComment.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("comment not found");
+        if(author == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("invalid user");
+        CommentEntity comment = optionalComment.get();
+        if(!comment.getUser().getId().equals(author.getId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not Authorized to delete this comment");
+
+        commentRepository.delete(comment);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("comment deleted successfully");
     }
 
     @Override

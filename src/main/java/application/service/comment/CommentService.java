@@ -12,6 +12,8 @@ public interface CommentService {
 
     ResponseEntity<?> getAllCommentsAssociatedToAPost(String post_id, UserDetails userDetails);
 
+    ResponseEntity<?> deleteComment(String comment_id, UserDetails userDetails);
+
     ResponseEntity<?> createReply(String parent_comment_id, CommentRequestDto requestDto, UserDetails userDetails);
 
     ResponseEntity<?> editReply(String parent_comment_id, CommentRequestDto requestDto, UserDetails userDetails);
