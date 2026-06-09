@@ -2,6 +2,7 @@ package application.entity.user;
 
 import application.entity.BaseEntity;
 import application.entity.code.VerificationCodeEntity;
+import application.entity.comment.CommentEntity;
 import application.entity.post.PostEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -55,6 +56,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     )
     @JsonManagedReference
     private List<PostEntity> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CommentEntity> comments;
 
     @Column(name = "is_verified")
     private boolean is_verified;
