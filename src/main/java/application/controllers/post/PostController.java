@@ -17,11 +17,6 @@ public class PostController {
         this.postService = postService;
     }
 
-//    @GetMapping
-//    public String getPost(@AuthenticationPrincipal UserDetails userDetails) {
-//        return "currently logged in user to create post" + userDetails.getUsername();
-//    }
-
     @PostMapping
     public ResponseEntity<?> createPost(@ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails){
         return this.postService.createPost(requestDto, userDetails);

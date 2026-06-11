@@ -15,7 +15,4 @@ public interface AuthService {
 
     public ResponseEntity<?> logOut();
 
-//    public ResponseEntity<?> resetPassword(String resetCode);
-//
-//    public ResponseEntity<?>
 }
