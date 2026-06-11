@@ -3,6 +3,7 @@ package application.service.post;
 import application.dto.requestDto.PostRequestDto;
 import application.entity.post.PostEntity;
 import application.entity.user.UserEntity;
+import application.exceptions.custom_exception.CustomImageStorageException;
 import application.repository.post.PostRepository;
 import application.repository.user.UserRepository;
 import application.service.storage.ImageStorage;
@@ -45,6 +46,8 @@ public class PostServiceImplementation implements PostService{
                     .status(HttpStatus.FORBIDDEN)
                     .body("you dont have an account, please create an account to continue using this service");
 
+        UserEntity user = userRepository.findByUsername(userDetails.getUsername());
+
         String title = requestDto.title();
         String content = requestDto.content();
         MultipartFile originalFile = null;
@@ -60,13 +63,14 @@ public class PostServiceImplementation implements PostService{
         if(filename == null || filename.isEmpty()){
             System.out.println("in here....");
             try {
-                throw new BadRequestException("please upload a valid image file");
-            } catch (BadRequestException e) {
-                throw new RuntimeException(e);
+                throw new CustomImageStorageException("please upload a valid image file");
+            } catch (CustomImageStorageException e) {
+                throw new CustomImageStorageException("error uploading file");
             }
         }
 
-        if(!filename.endsWith(".jpg") || !filename.endsWith(".png")) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Image format not supported, upload a .jpg file or a .png file");
+        System.out.println(filename);
+        if(!filename.endsWith(".jpg") && !filename.endsWith(".png")) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Image format not supported, upload a .jpg file or a .png file");
 
         if(filesize > 22224157) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("file to large, file size be 20mb or lower");
 
@@ -75,12 +79,12 @@ public class PostServiceImplementation implements PostService{
                 .title(title)
                 .content(content)
                 .image_path(String.valueOf(image_path))
-                .user((UserEntity) userDetails)
+                .user(user)
                 .build();
 
         this.imageStorage.store(originalFile);
         this.repository.save(post);
-        return  ResponseEntity.ok("post created successfully!");
+        return  ResponseEntity.status(HttpStatus.CREATED).body("post created successfully!");
     }
 
     @Override
@@ -99,7 +103,7 @@ public class PostServiceImplementation implements PostService{
 
         if (posts.isEmpty()) ResponseEntity.status(404).body("not post to fetch");
 
-        return ResponseEntity.status(200).body(posts);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(posts);
     }
 
     @Override
