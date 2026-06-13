@@ -82,19 +82,6 @@ Ensure you have the following packages installed:
 
 ---
 
-## Core API Endpoints
-
-All endpoints consume and produce JSON formatting (`application/json`), except media file creation methods which receive multipart payloads.
-
-
-| Method | Endpoint                | Payload Type | Description | Auth Bound |
-| :--- |:------------------------| :--- | :--- | :--- |
-| **POST** | `/api/v1/auth/register` | JSON | Creates a new user entity profile | No |
-| **POST** | `/api/v1/auth/login`    | JSON | Validates credentials; returns secure JWT cookie | No |
-| **POST** | `/api/v1/posts/create`  | `multipart/form-data` | Accepts text variables and `image_file` blob | **Yes** |
-| **GET** | `/api/v1/posts/feed`    | Query Params | Retrieves localized user timeline feeds | **Yes** |
-
-
 ### Frontend Integration Note
 Because the security filter is structured to validate sessions and credentials from third-party client environments, cross-origin communication scripts (such as Axios or Fetch) **must enable credentials passing explicit configurations**:
 ```javascript
