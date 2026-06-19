@@ -1,11 +1,17 @@
 package application.controllers.auth;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import application.dto.requestDto.Code;
 import application.dto.requestDto.SignInRequest;
 import application.dto.requestDto.SignUpRequest;
 import application.security.service.AuthServiceImplementation;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth/")
@@ -18,17 +24,17 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest){
         return  this.authServiceImplementation.signUp(signUpRequest);
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<?> singIn(@RequestBody SignInRequest signInRequest){
+    public ResponseEntity<?> singIn(@Valid @RequestBody SignInRequest signInRequest){
         return this.authServiceImplementation.signIn(signInRequest);
     }
 
     @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(@RequestBody  Code codeDto){
+    public ResponseEntity<?> verifyCode(@Valid @RequestBody  Code codeDto){
         return this.authServiceImplementation.verifyCode(codeDto);
     }
 
