@@ -1,14 +1,21 @@
 package application.controllers.post;
 
-import application.dto.requestDto.PostRequestDto;
-import application.service.post.PostServiceImplementation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import application.dto.requestDto.PostRequestDto;
+import application.service.post.PostServiceImplementation;
 
 @RestController
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1/users/posts")
 public class PostController {
 
     private final PostServiceImplementation postService;
@@ -32,7 +39,7 @@ public class PostController {
         return this.postService.getPostById(post_id, userDetails);
     }
 
-    @GetMapping("/users/{owner_id}")
+    @GetMapping("/{owner_id}")
     public ResponseEntity<?> getPostByOwner(@PathVariable String owner_id, @AuthenticationPrincipal UserDetails userDetails){
         return this.postService.getAllOwnersPost(owner_id, userDetails);
     }
