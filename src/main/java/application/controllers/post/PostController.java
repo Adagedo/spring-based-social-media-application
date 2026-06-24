@@ -3,13 +3,7 @@ package application.controllers.post;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import application.dto.requestDto.PostRequestDto;
 import application.service.post.PostServiceImplementation;
@@ -44,7 +38,7 @@ public class PostController {
         return this.postService.getAllOwnersPost(owner_id, userDetails);
     }
 
-    @PostMapping("/{post_id}")
+    @PutMapping("/{post_id}")
     public ResponseEntity<?> updatePost(@PathVariable String post_id, @ModelAttribute PostRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails){
         return this.postService.editPost(post_id, requestDto, userDetails);
     }

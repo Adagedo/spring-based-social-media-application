@@ -33,9 +33,9 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Builder.Default
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    @Builder.Default
     private Timestamp createdAt = Timestamp.from(Instant.now());
 
     @UpdateTimestamp
